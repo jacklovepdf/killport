@@ -5,7 +5,7 @@
 var isWin = process.platform === 'win32';
 var exec = require('child_process').exec;
 
-function killport(port, filter) {
+module.exports = function (port, filter) {
     return new Promise((resolve, reject) => {
         if(typeof port === "number" && typeof filter === "string"){
             var strLine, strLineLen,
@@ -42,8 +42,4 @@ function killport(port, filter) {
             reject({error:"args error"});
         }
     })
-}
-
-module.exports = function (port, filter) {
-    killport(port, filter);
 };

@@ -1,6 +1,6 @@
 {
-  "name": "killport",
-  "version": "1.0.0",
+  "name": "@jacklovepdf/killport",
+  "version": "1.2.0",
   "description": "kill app of the specified port",
   "main": "index.js",
   "scripts": {
