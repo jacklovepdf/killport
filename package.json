@@ -1,0 +1,23 @@
+{
+  "name": "killport",
+  "version": "1.0.0",
+  "description": "kill app of the specified port",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacklovepdf/killport.git"
+  },
+  "keywords": [
+    "kill",
+    "port"
+  ],
+  "author": "jacklovepdf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jacklovepdf/killport/issues"
+  },
+  "homepage": "https://github.com/jacklovepdf/killport#readme"
+}
