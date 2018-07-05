@@ -3,17 +3,17 @@
  * @author jacklovepdf
  */
 var isWin = process.platform === 'win32';
-var exec = require('child_process').exec;
 
 module.exports = function (port, filter) {
     return new Promise((resolve, reject) => {
-        if(typeof port === "number" && typeof filter === "string"){
+        if(typeof port === "number"){
             var strLine, strLineLen,
                 cmd = isWin ? `netstat -ano | findstr ${port}` : `lsof -i :${port}`;
+            var exec = require('child_process').exec;
 
             exec(cmd, function(err, stdout) {
                 if(err){
-                    reject({error:err});
+                    resolve({error:err});
                 }
                 strLine = stdout.split('\n');
                 strLineLen = strLine.length;
