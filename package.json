@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/jacklovepdf/killport/issues"
   },
-  "homepage": "https://github.com/jacklovepdf/killport#readme"
+  "homepage": "https://github.com/jacklovepdf/killport#readme",
+  "dependencies": {
+    "execa": "^0.10.0"
+  }
 }
