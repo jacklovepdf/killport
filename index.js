@@ -21,8 +21,10 @@ module.exports = function (port, filter) {
                     strLine.forEach(function(line, index){
                         var p = line.trim().split(/\s+/);
                         var address = isWin ? p[4] : p[1];
+                        var isFilterCommand = p[0].indexOf(filter) === -1;
 
-                        if(address != undefined && address != "PID" && p[0].indexOf(filter) === -1){
+                        console.log("isFilterCommand====>", isFilterCommand, "p=====>", p);
+                        if(address != undefined && address != "PID" && isFilterCommand){
                             exec('kill -9'+ address, (err) => {
                                 count++;
                                 if(err){
