@@ -3,49 +3,51 @@
  * @author jacklovepdf
  */
 var isWin = process.platform === 'win32';
+var execa = require('execa')
 
 module.exports = function (port, filter) {
     return new Promise((resolve, reject) => {
         if(typeof port === "number"){
-            var strLine, strLineLen, count=0, killCount=0;
+            var strLine, strLineLen, count=0, killCount=0,
                 cmd = isWin ? `netstat -ano | findstr ${port}` : `lsof -i :${port}`;
-            var exec = require('child_process').exec;
 
-            exec(cmd, function(err, stdout) {
-                if(err){
-                    resolve({error:err});
-                }
+            execa(cmd).then((result) => {
+                var stdout = result.stdout;
                 strLine = stdout.split('\n');
                 strLineLen = strLine.length;
+
                 if(strLineLen > 1){
                     strLine.forEach(function(line, index){
                         var p = line.trim().split(/\s+/);
                         var address = isWin ? p[4] : p[1];
                         var isFilterCommand = p[0].indexOf(filter) === -1;
 
-                        console.log("isFilterCommand====>", isFilterCommand, "p=====>", p);
                         if(address != undefined && address != "PID" && isFilterCommand){
-                            exec('kill -9'+ address, (err) => {
+                            execa('kill -9'+ address).then(() => {
                                 count++;
-                                if(err){
-                                    killCount++;
-                                }
                                 if(count === strLineLen){
                                     killCount ? reject() : resolve()
                                 }
-                            });
+                            }).catch((err) => {
+                                count++;
+                                killCount++;
+                                if(count === strLineLen){
+                                    killCount ? reject() : resolve()
+                                }
+                            })
                         }else {
                             count++;
-                            killCount++;
                             if(count === strLineLen){
-                                resolve();
+                                killCount ? reject() : resolve()
                             }
                         }
-                    });
+                    })
                 }else {
-                    resolve();
+                    resolve()
                 }
-            });
+            }).catch(() => {
+                resolve()
+            })
         }else {
             reject({error:"args error"});
         }
