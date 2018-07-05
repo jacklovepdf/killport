@@ -7,7 +7,7 @@ var isWin = process.platform === 'win32';
 module.exports = function (port, filter) {
     return new Promise((resolve, reject) => {
         if(typeof port === "number"){
-            var strLine, strLineLen,
+            var strLine, strLineLen, count=0, killCount=0;
                 cmd = isWin ? `netstat -ano | findstr ${port}` : `lsof -i :${port}`;
             var exec = require('child_process').exec;
 
@@ -23,19 +23,25 @@ module.exports = function (port, filter) {
                         var address = isWin ? p[4] : p[1];
 
                         if(address != undefined && address != "PID" && p[0].indexOf(filter) === -1){
-                            exec('kill -9'+ address, () => {
-                                if(index === strLineLen-1){
-                                    resolve();
+                            exec('kill -9'+ address, (err) => {
+                                count++;
+                                if(err){
+                                    killCount++;
+                                }
+                                if(count === strLineLen){
+                                    killCount ? reject() : resolve()
                                 }
                             });
                         }else {
-                            if(index === strLineLen-1){
+                            count++;
+                            killCount++;
+                            if(count === strLineLen){
                                 resolve();
                             }
                         }
                     });
                 }else {
-                    reject({error:"no specified port"});
+                    resolve();
                 }
             });
         }else {
